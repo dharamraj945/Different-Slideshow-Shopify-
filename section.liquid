@@ -1,0 +1,435 @@
+{{ 'swiper.css' | asset_url | stylesheet_tag }}
+<!-- swiper-slider.liquid -->
+<div class="swiper">
+  <div class="swiper-wrapper">
+    {% for block in section.blocks %}
+      <div class="swiper-slide">
+        {% if block.settings.desktop_image != blank %}
+          <img src="{{ block.settings.desktop_image | img_url: 'master' }}" alt="{{ block.settings.headline | escape }}" class="banner-img-desktop" />
+        {% endif %}
+        {% if block.settings.mobile_image != blank %}
+          <img src="{{ block.settings.mobile_image | img_url: 'master' }}" alt="{{ block.settings.headline | escape }}" class="banner-img-mobile" />
+        {% endif %}
+        <div class="banner-content">
+          {% if block.settings.headline != blank %}
+            <h2>{{ block.settings.headline }}</h2>
+          {% endif %}
+          {% if block.settings.description != blank %}
+            <p>{{ block.settings.description }}</p>
+          {% endif %}
+          {% if block.settings.button_link != blank and block.settings.button_text != blank %}
+            <a href="{{ block.settings.button_link }}" class="banner-button">{{ block.settings.button_text }}</a>
+          {% endif %}
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-pagination"></div>
+</div>
+
+<style>
+/* Swiper container & slide settings */
+.swiper {
+  width: 100%;
+  height: 100vh;
+  max-height: 800px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 30px 50px rgba(0, 0, 0, 0.2);
+}
+
+.swiper-slide {
+  position: relative;
+  overflow: hidden;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transform: scale(1.1);
+  transition: transform 5s cubic-bezier(0.25, 0.45, 0.45, 0.95);
+}
+
+.swiper-slide-active img {
+  transform: scale(1);
+}
+
+/* Gradient overlay on each slide */
+.swiper-slide::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.1) 0%,
+    rgba(0, 0, 0, 0.7) 100%
+  );
+}
+
+/* Banner Content */
+.banner-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  padding: 50px 80px;
+  color: #fff;
+  z-index: 2;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.3, 0.1, 0.3, 1);
+}
+
+.swiper-slide-active .banner-content {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Headings */
+.banner-content h2 {
+  font-size: 4.5rem;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  transform: translateX(-50px);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.3, 0.1, 0.3, 1) 0.3s;
+  color: #fff;
+}
+
+.swiper-slide-active .banner-content h2 {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Paragraph Text */
+.banner-content p {
+  font-size: 1.5rem;
+  line-height: 1.6;
+  margin-bottom: 30px;
+  max-width: 600px;
+  transform: translateX(-50px);
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.3, 0.1, 0.3, 1) 0.5s;
+  color: #fff;
+}
+
+.swiper-slide-active .banner-content p {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Banner Button */
+.banner-button {
+  display: inline-block;
+  padding: 15px 35px;
+  background-color: rgba(255, 87, 34, 0.9);
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.2rem;
+  font-weight: 500;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  transform: translateY(50px);
+  opacity: 0;
+  /* Use a longer transition delay for button */
+  transition: all 0.8s cubic-bezier(0.3, 0.1, 0.3, 1) 0.7s;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.swiper-slide-active .banner-button {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.banner-button:hover {
+  background-color: rgba(255, 87, 34, 1);
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.banner-button:active {
+  transform: translateY(0);
+}
+
+.banner-button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateX(-100%) skewX(-15deg);
+  transition: transform 0.6s ease;
+}
+
+.banner-button:hover::after {
+  transform: translateX(100%) skewX(-15deg);
+}
+
+/* Mobile & Desktop Image Visibility */
+.banner-img-desktop {
+  display: block;
+}
+.banner-img-mobile {
+  display: none;
+}
+
+/* Pagination container adjustments so dots are visible */
+.swiper-pagination {
+  position: absolute;
+  bottom: 10px;
+  text-align: center;
+  z-index: 20;
+}
+
+/* Default Swiper Pagination Bullets */
+.swiper-pagination-bullet {
+  width: 12px;
+  height: 12px;
+  background: rgba(255, 255, 255, 0.4);
+  opacity: 1;
+  transition: all 0.3s ease;
+}
+
+.swiper-pagination-bullet-active {
+  background: #ff5722;
+  transform: scale(1.3);
+}
+
+/* Navigation Buttons (Default classes) */
+.swiper-button-next,
+.swiper-button-prev {
+  width: 60px;
+  height: 60px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.swiper-button-next:hover,
+.swiper-button-prev:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 1.5rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .banner-content {
+    padding: 30px;
+  }
+  
+  .banner-content h2 {
+    font-size: 3.5rem;
+  }
+  
+  .banner-content p {
+    font-size: 1.3rem;
+  }
+  
+  .swiper-button-next,
+  .swiper-button-prev {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Hide desktop image, show mobile image */
+  .banner-img-desktop {
+    display: none;
+  }
+  .banner-img-mobile {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;  /* Ensure mobile image stays behind content */
+  }
+  
+  .banner-content h2 {
+    font-size: 2.5rem;
+  }
+  
+  .banner-button {
+    padding: 12px 25px;
+  }
+}
+</style>
+
+{{ 'swiper.js' | asset_url | script_tag }}
+<script>
+  document.addEventListener('DOMContentLoaded', function(){
+    const swiper = new Swiper(".swiper", {
+      loop: true,
+      effect: "fade",
+      fadeEffect: { crossFade: true },
+      speed: 1000,
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      autoplay: {
+        delay: 5000,
+        disableOnInteraction: false,
+      },
+      on: {
+        init: function () {
+          const activeSlide = this.slides[this.activeIndex];
+          const content = activeSlide.querySelector(".banner-content");
+          if (content) {
+            content.style.opacity = "1";
+            content.style.transform = "translateY(0)";
+            const h2 = content.querySelector("h2");
+            const p = content.querySelector("p");
+            const button = content.querySelector(".banner-button");
+            if (h2) {
+              h2.style.opacity = "1";
+              h2.style.transform = "translateX(0)";
+            }
+            if (p) {
+              p.style.opacity = "1";
+              p.style.transform = "translateX(0)";
+            }
+            if (button) {
+              button.style.opacity = "1";
+              button.style.transform = "translateY(0)";
+            }
+          }
+        },
+        slideChangeTransitionStart: function () {
+          this.slides.forEach(function(slide) {
+            const content = slide.querySelector(".banner-content");
+            if (content) {
+              content.style.opacity = "0";
+              content.style.transform = "translateY(100px)";
+              const h2 = content.querySelector("h2");
+              const p = content.querySelector("p");
+              const button = content.querySelector(".banner-button");
+              if (h2) {
+                h2.style.opacity = "0";
+                h2.style.transform = "translateX(-50px)";
+              }
+              if (p) {
+                p.style.opacity = "0";
+                p.style.transform = "translateX(-50px)";
+              }
+              if (button) {
+                button.style.opacity = "0";
+                button.style.transform = "translateY(50px)";
+              }
+            }
+          });
+        },
+        slideChangeTransitionEnd: function () {
+          const activeSlide = this.slides[this.activeIndex];
+          const content = activeSlide.querySelector(".banner-content");
+          if (content) {
+            content.style.opacity = "1";
+            content.style.transform = "translateY(0)";
+            const h2 = content.querySelector("h2");
+            const p = content.querySelector("p");
+            const button = content.querySelector(".banner-button");
+            if (h2) {
+              h2.style.opacity = "1";
+              h2.style.transform = "translateX(0)";
+            }
+            if (p) {
+              p.style.opacity = "1";
+              p.style.transform = "translateX(0)";
+            }
+            if (button) {
+              button.style.opacity = "1";
+              button.style.transform = "translateY(0)";
+            }
+          }
+        }
+      },
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Swiper Slider",
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "desktop_image",
+          "label": "Desktop Image"
+        },
+        {
+          "type": "image_picker",
+          "id": "mobile_image",
+          "label": "Mobile Image"
+        },
+        {
+          "type": "text",
+          "id": "headline",
+          "label": "Headline",
+          "default": "Slide Headline"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Slide description goes here."
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button Link"
+        },
+        {
+          "type": "text",
+          "id": "button_text",
+          "label": "Button Text",
+          "default": "Click Here"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Swiper Slider",
+      "category": "Slider"
+    }
+  ]
+}
+{% endschema %}
